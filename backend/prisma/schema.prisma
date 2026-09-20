@@ -1,0 +1,78 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  role     String @default("DISPATCHER") // ADMIN, DISPATCHER
+}
+
+model Ambulance {
+  id         Int        @id @default(autoincrement())
+  unitCode   String     @unique
+  status     String     @default("AVAILABLE") // AVAILABLE, DISPATCHED, EN_ROUTE, ON_SCENE, RETURNING
+  lat        Float
+  lng        Float
+  driverName String?
+  hospitalId Int?
+  incidents  Incident[]
+  routes     Route[]
+}
+
+model Incident {
+  id                  Int        @id @default(autoincrement())
+  type                String     // CAR_CRASH, HEART_ATTACK, FIRE, etc.
+  lat                 Float
+  lng                 Float
+  severity            String     // LOW, MEDIUM, CRITICAL
+  status              String     @default("OPEN") // OPEN, ASSIGNED, RESOLVED
+  assignedAmbulanceId Int?
+  ambulance           Ambulance? @relation(fields: [assignedAmbulanceId], references: [id])
+  routes              Route[]
+}
+
+model Route {
+  id          Int       @id @default(autoincrement())
+  ambulance   Ambulance @relation(fields: [ambulanceId], references: [id])
+  ambulanceId Int
+  incident    Incident  @relation(fields: [incidentId], references: [id])
+  incidentId  Int
+  waypoints   String    // Stringified JSON
+  distanceKm  Float
+  etaMin      Float
+}
+
+model TrafficSignal {
+  id               Int     @id @default(autoincrement())
+  intersectionName String
+  lat              Float
+  lng              Float
+  status           String  // GREEN, AMBER, RED
+  priorityMode     String  @default("NORMAL") // NORMAL, PRIORITY, PREEMPTION
+}
+
+model Alert {
+  id        Int      @id @default(autoincrement())
+  type      String
+  message   String
+  severity  String   // INFO, WARNING, CRITICAL
+  unitId    String?
+  createdAt DateTime @default(now())
+}
+
+model SystemLog {
+  id        Int      @id @default(autoincrement())
+  level     String   // INFO, WARN, ERROR
+  message   String
+  unitId    String?
+  module    String
+  createdAt DateTime @default(now())
+}
