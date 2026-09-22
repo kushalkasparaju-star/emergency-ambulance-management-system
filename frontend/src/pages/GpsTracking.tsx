@@ -10,11 +10,6 @@ const IconAmbulance = L.icon({
   iconAnchor: [16, 16],
 });
 
-const IconHospital = L.icon({
-  iconUrl: 'https://cdn-icons-png.flaticon.com/512/3063/3063124.png',
-  iconSize: [32, 32],
-  iconAnchor: [16, 16],
-});
 
 const IconIncident = L.icon({
   iconUrl: 'https://cdn-icons-png.flaticon.com/512/564/564619.png',
