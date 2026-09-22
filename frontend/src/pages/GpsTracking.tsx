@@ -103,8 +103,8 @@ export default function GpsTracking() {
       <div className="w-full md:w-3/4 rounded-xl overflow-hidden shadow-lg border border-border flex flex-col relative z-0">
          <MapContainer center={center} zoom={13} style={{ height: '100%', width: '100%' }}>
             <TileLayer
-              attribution='&copy; OpenStreetMap contributors'
-              url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {ambulances.map(amb => (
               <Marker key={`amb-${amb.id}`} position={[amb.lat, amb.lng]} icon={IconAmbulance}>
